@@ -2,8 +2,8 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import getCSSModuleLocalIdent from 'react-dev-utils/getCSSModuleLocalIdent';
 const generateSourceMap = process.env.OMIT_SOURCEMAP === 'true' ? false : true;
 
-const cssRegex = /\.css$/;
-const cssModuleRegex = /\.module\.css$/;
+const cssRegex = /\.(css|scss)$/;
+const cssModuleRegex = /\.module\.(css|scss)$/;
 
 // temporary wrapper function around getCSSModuleLocalIdent until this issue is resolved:
 // https://github.com/webpack-contrib/css-loader/pull/965
@@ -51,10 +51,11 @@ const cssModuleLoaderClient = {
             loader: require.resolve('css-loader'),
             options: {
                 localsConvention: 'camelCase',
-                modules: {
+                modules: { getLocalIdent: getLocalIdentWorkaround },
+                /*modules: {
                     // getLocalIdent: getCSSModuleLocalIdent,
                     getLocalIdent: getLocalIdentWorkaround,
-                },
+                },*/
                 importLoaders: 1,
                 sourceMap: generateSourceMap,
                 // localIdentName: '[name]__[local]--[hash:base64:5]',
@@ -62,27 +63,14 @@ const cssModuleLoaderClient = {
             },
         },
         {
+            loader: require.resolve('sass-loader'),
+        },
+        /*{
             loader: require.resolve('postcss-loader'),
             options: {
                 sourceMap: generateSourceMap,
             },
-        },
-    ],
-};
-
-const cssLoaderClient = {
-    test: cssRegex,
-    exclude: cssModuleRegex,
-    use: [
-        require.resolve('css-hot-loader'),
-        MiniCssExtractPlugin.loader,
-        require.resolve('css-loader'),
-        {
-            loader: require.resolve('postcss-loader'),
-            options: {
-                sourceMap: generateSourceMap,
-            },
-        },
+        },*/
     ],
 };
 
@@ -95,17 +83,40 @@ const cssModuleLoaderServer = {
                 onlyLocals: true,
                 localsConvention: 'camelCase',
                 importLoaders: 1,
-                modules: {
+                modules: { getLocalIdent: getLocalIdentWorkaround },
+                /* modules: {
                     // getLocalIdent: getCSSModuleLocalIdent,
                     getLocalIdent: getLocalIdentWorkaround,
-                },
+                },*/
             },
         },
         {
+            loader: require.resolve('sass-loader'),
+        },
+        /*{
             loader: require.resolve('postcss-loader'),
             options: {
                 sourceMap: generateSourceMap,
             },
+        },*/
+    ],
+};
+
+const cssLoaderClient = {
+    test: cssRegex,
+    exclude: cssModuleRegex,
+    use: [
+        require.resolve('css-hot-loader'),
+        MiniCssExtractPlugin.loader,
+        require.resolve('css-loader'),
+        /*{
+            loader: require.resolve('postcss-loader'),
+            options: {
+                sourceMap: generateSourceMap,
+            },
+        },*/
+        {
+            loader: require.resolve('sass-loader'),
         },
     ],
 };
@@ -113,7 +124,11 @@ const cssModuleLoaderServer = {
 const cssLoaderServer = {
     test: cssRegex,
     exclude: cssModuleRegex,
-    use: [MiniCssExtractPlugin.loader, require.resolve('css-loader')],
+    use: [
+        MiniCssExtractPlugin.loader,
+        require.resolve('css-loader'),
+        require.resolve('sass-loader'),
+    ],
 };
 
 const urlLoaderClient = {

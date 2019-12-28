@@ -1,0 +1,18 @@
+@import "./styles/reset";
+@import "./styles/variables";
+.wrapper {
+    margin: auto;
+    max-width: 100%;
+    width: 768px;
+
+    h1 {
+        font-size: 15px;
+        color: $ja-pink-color;
+    }
+}
+
+.reactLogo {
+    height: 48px;
+    vertical-align: middle;
+    width: 48px;
+}

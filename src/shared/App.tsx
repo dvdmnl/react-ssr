@@ -7,7 +7,7 @@ import favicon from '../shared/assets/favicon.png';
 import { setLocale } from './store/app/actions';
 import { Locale } from './store/app/types';
 import { ReactComponent as ReactLogo } from './assets/react.svg';
-import css from './App.module.css';
+import css from './App.module.scss';
 
 const App: React.FC<any> = () => {
     const { t } = useTranslation();

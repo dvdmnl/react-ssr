@@ -16,3 +16,4 @@ tmp
 bundle-stats.json
 .vscode
 /dependency-graph.svg
+.idea
